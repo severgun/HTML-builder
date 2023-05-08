@@ -50,26 +50,26 @@ async function buildCssStyles() {
 
   // Remove old file
   await fs.rm(destFilePath, {force: true}).catch((error) => {
-      console.error('Could not remove file.', error);
+    console.error('Could not remove file.', error);
   });
 
   // Append all css files from 'styles' dir
   try {
-      const stylesFolderContent = await fs.readdir(stylesDirPath);
-      stylesFolderContent.forEach(item => {
-          const filePath = path.join(stylesDirPath, item);
-          if (path.extname(filePath) === '.css') {
-              fs.readFile(filePath).then((data) => {
-                  fs.appendFile(destFilePath, data).catch((error) => {
-                      console.error('Could not append data to file.', error);
-                  });
-              }).catch((error) => {
-                  console.error('Could not read file content.', error);
-              });
-          }
-      });
+    const stylesFolderContent = await fs.readdir(stylesDirPath);
+    stylesFolderContent.forEach(item => {
+      const filePath = path.join(stylesDirPath, item);
+      if (path.extname(filePath) === '.css') {
+        fs.readFile(filePath).then((data) => {
+          fs.appendFile(destFilePath, data).catch((error) => {
+            console.error('Could not append data to file.', error);
+          });
+        }).catch((error) => {
+          console.error('Could not read file content.', error);
+        });
+      }
+    });
   } catch (error) {
-      console.error('Folder content could not be retrieved.', error);
+    console.error('Folder content could not be retrieved.', error);
   }
 }
 
@@ -79,9 +79,9 @@ async function copyAssetsDir() {
   
   // Create dest folder if not exist.
   try {
-      await fs.mkdir(destDirPath, {recursive: true});
+    await fs.mkdir(destDirPath, {recursive: true});
   } catch (error) {
-      console.error('Folder could not be created!', error);
+    console.error('Folder could not be created!', error);
   }
 
   async function copyFiles(p) {

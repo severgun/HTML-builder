@@ -3,45 +3,45 @@ const path = require("node:path");
 
 
 async function copyDir() {
-    const srcDirPath = path.join(__dirname, 'files');
-    const destDirPath = path.join(__dirname, 'files-copy');
-    
-    // Create dest folder if not exist.
-    try {
-        await fs.mkdir(destDirPath, {recursive: true});
-    } catch (error) {
-        console.error('Folder could not be created!', error);
-    }
+  const srcDirPath = path.join(__dirname, 'files');
+  const destDirPath = path.join(__dirname, 'files-copy');
 
-    let srcDirContent = [];
-    let destDirContent = [];
-    try {
-        srcDirContent = await fs.readdir(srcDirPath);
-        destDirContent = await fs.readdir(destDirPath);
+  // Create dest folder if not exist.
+  try {
+    await fs.mkdir(destDirPath, {recursive: true});
+  } catch (error) {
+    console.error('Folder could not be created!', error);
+  }
 
-        // Remove files that is not present at src dir.
-        contentToRemove = destDirContent.filter(file => !srcDirContent.includes(file));
-        contentToRemove.forEach(item => {
-            try {
-                fs.rm(path.join(destDirPath, item));
-            } catch (error) {
-                console.error('File could not be removed!', error);
-            }
-        });
+  let srcDirContent = [];
+  let destDirContent = [];
+  try {
+    srcDirContent = await fs.readdir(srcDirPath);
+    destDirContent = await fs.readdir(destDirPath);
 
-        // Copy files
-        srcDirContent.forEach(item => {
-            const srcFilePath = path.join(srcDirPath, item);
-            const destFilePath = path.join(destDirPath, item);
-            try {
-                fs.copyFile(srcFilePath, destFilePath);
-            } catch (error) {
-                console.error('File could not be copied!', error);
-            }
-        });
-    } catch (error) {
-        console.log('Folder content could not be retrieved', error);
-    }
+    // Remove files that is not present at src dir.
+    contentToRemove = destDirContent.filter(file => !srcDirContent.includes(file));
+    contentToRemove.forEach(item => {
+      try {
+        fs.rm(path.join(destDirPath, item));
+      } catch (error) {
+        console.error('File could not be removed!', error);
+      }
+    });
+
+    // Copy files
+    srcDirContent.forEach(item => {
+      const srcFilePath = path.join(srcDirPath, item);
+      const destFilePath = path.join(destDirPath, item);
+      try {
+        fs.copyFile(srcFilePath, destFilePath);
+      } catch (error) {
+        console.error('File could not be copied!', error);
+      }
+    });
+  } catch (error) {
+    console.log('Folder content could not be retrieved', error);
+  }
 }
 
 copyDir();
