@@ -5,11 +5,16 @@ const templatePath = path.join(__dirname, 'template.html');
 const componentsPath = path.join(__dirname, 'components');
 const projDir = path.join(__dirname, 'project-dist');
 
-async function buildIndexHtml() {
-  await fs.rm(projDir, {recursive: true, force: true}).catch((error) => {
+async function prepFolder(p) {
+  await fs.rm(projDir, {recursive: true, force: true, maxRetries: 10}).catch((error) => {
     console.error('Could not remove directory.', error);
   });
+  await fs.mkdir(projDir, {recursive: true}).catch((error) => {
+    console.error('Folder could not be created!', error);
+  });
+}
 
+async function buildIndexHtml() {
   const template = await fs.readFile(templatePath, {encoding: 'utf-8'}).catch((error) => {
     console.error('Could not read the file.', error);
   });
@@ -102,6 +107,11 @@ async function copyAssetsDir() {
   copyFiles(srcDirPath);
 }
 
-buildIndexHtml();
-buildCssStyles();
-copyAssetsDir();
+async function buildProject() {
+  await prepFolder(projDir);
+  await buildIndexHtml();
+  await buildCssStyles();
+  await copyAssetsDir();
+}
+
+buildProject();
